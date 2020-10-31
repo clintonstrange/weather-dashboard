@@ -1,0 +1,11 @@
+* {
+  border: 1px solid red;
+}
+
+.btn {
+  border: solid 3px skyblue;
+}
+
+.card-header {
+  font-size: 20px;
+}
