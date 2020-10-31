@@ -6,9 +6,9 @@ var fiveDayContainerEl = document.querySelector("#five-day-container");
 var getCityWeather = function (city) {
   // format the github api url
   var apiUrl =
-    "api.openweathermap.org/data/2.5/weather?q=" +
+    "https://api.openweathermap.org/data/2.5/weather?q=" +
     city +
-    "&appid=2c1cfa7d8c1ab09dbd43af544129557a";
+    "&units=imperial&appid=2c1cfa7d8c1ab09dbd43af544129557a";
   console.log(apiUrl);
   // make a request to the url
   fetch(apiUrl)
@@ -16,7 +16,7 @@ var getCityWeather = function (city) {
       // request was successful
       if (response.ok) {
         response.json().then(function (data) {
-          displayWeather(city);
+          displayWeather(data, city);
         });
       } else {
         alert("Error: " + response.statusText);
@@ -37,11 +37,20 @@ var displayWeather = function (city) {
 
   // clear old content
   currentContainerEl.textContent = "";
+  console.log(city.name);
+  console.log(city.main.temp);
+  console.log(city.main.humidity);
+  console.log(city.wind.speed);
 
   // loop over repos
   //for (var i = 0; i < repos.length; i++) {
   // format repo name
-  var cityName = city.name + "/" + city.dt;
+  var cityName = city.name;
+  var todaysDate = moment().format("(MM/DD/YYYY)");
+  var cityIcon = city.weather[0].icon;
+
+  var weatherTitle = cityName + " " + todaysDate + " " + cityIcon;
+  console.log(weatherTitle);
 
   // create a container for each repo
   var cityEl = document.createElement("div");
@@ -49,7 +58,7 @@ var displayWeather = function (city) {
 
   // create a span element to hold repository name
   var titleEl = document.createElement("span");
-  titleEl.textContent = cityName;
+  titleEl.textContent = weatherTitle;
 
   // append to container
   cityEl.appendChild(titleEl);
@@ -61,23 +70,20 @@ var displayWeather = function (city) {
   var cityTemp = city.main.temp;
   var cityTempEl = document.createElement("p");
   cityTempEl.classList = "list-item flex-row align-left";
-  var tempEl = document.createElement("span");
-  tempEl.textContent = cityTemp;
-  weatherEl.appendChild(TempEl);
+  cityTempEl.textContent = cityTemp + " F";
+  weatherEl.appendChild(cityTempEl);
 
   var cityHumid = city.main.humidity;
   var cityHumidEl = document.createElement("p");
   cityHumidEl.classList = "list-item flex-row align-left";
-  var humidEl = document.createElement("span");
-  humidEl.textContent = cityHumid;
-  weatherEl.appendChild(TempEl);
+  cityHumidEl.textContent = cityHumid + "% Humidty";
+  weatherEl.appendChild(cityHumidEl);
 
   var cityWind = city.wind.speed;
   var cityWindEl = document.createElement("p");
   cityWindEl.classList = "list-item flex-row align-left";
-  var WindEl = document.createElement("span");
-  wildEl.textContent = cityWind;
-  weatherEl.appendChild(TempEl);
+  cityWindEl.textContent = cityWind + "mph";
+  weatherEl.appendChild(cityWindEl);
 
   // WHERE IS UV INDEX??????
   // var cityTemp = city.main.temp;
@@ -106,7 +112,6 @@ var displayWeather = function (city) {
 };
 
 var formSubmitHandler = function (event) {
-  console.log("button clicked");
   event.preventDefault();
   // get value from input element
   var cityName = cityInputEl.value.trim();
