@@ -2,6 +2,7 @@ var cityFormEl = document.querySelector("#city-form");
 var cityInputEl = document.querySelector("#city-search-input");
 var currentContainerEl = document.querySelector("#current-container");
 var fiveDayContainerEl = document.querySelector("#five-day-container");
+var weatherEl = document.createElement("div");
 
 var getCityWeather = function (city) {
   // format the github api url
@@ -28,13 +29,15 @@ var getCityWeather = function (city) {
     });
 };
 
-var displayWeather = function (city) {
-  // check if api returned weather
-  // if (weather.length === 0) {
-  //   repoContainerEl.textContent = "No repositories found.";
-  //   return;
-  // }
+var displayUVIndex = function (data) {
+  var cityUV = data.value;
+  var cityUVEl = document.createElement("p");
+  cityUVEl.classList = "list-item flex-row align-left";
+  cityUVEl.textContent = "UV Index: " + cityUV;
+  weatherEl.appendChild(cityUVEl);
+};
 
+var displayWeather = function (city) {
   // clear old content
   currentContainerEl.textContent = "";
   console.log(city.name);
@@ -42,9 +45,6 @@ var displayWeather = function (city) {
   console.log(city.main.humidity);
   console.log(city.wind.speed);
 
-  // loop over repos
-  //for (var i = 0; i < repos.length; i++) {
-  // format repo name
   var cityName = city.name;
   var todaysDate = moment().format("(MM/DD/YYYY)");
   var cityIcon = city.weather[0].icon;
@@ -52,57 +52,53 @@ var displayWeather = function (city) {
   var weatherTitle = cityName + " " + todaysDate + " " + cityIcon;
   console.log(weatherTitle);
 
-  // create a container for each repo
   var cityEl = document.createElement("div");
   cityEl.classList = "list-item flex-row justify-space-between align-left";
 
-  // create a span element to hold repository name
   var titleEl = document.createElement("span");
   titleEl.textContent = weatherTitle;
 
-  // append to container
   cityEl.appendChild(titleEl);
 
-  // create a status element
-  var weatherEl = document.createElement("div");
   weatherEl.classList = "flex-row align-center";
 
   var cityTemp = city.main.temp;
   var cityTempEl = document.createElement("p");
   cityTempEl.classList = "list-item flex-row align-left";
-  cityTempEl.textContent = cityTemp + " F";
+  cityTempEl.textContent = "Temperature: " + cityTemp + " \u00B0F";
   weatherEl.appendChild(cityTempEl);
 
   var cityHumid = city.main.humidity;
   var cityHumidEl = document.createElement("p");
   cityHumidEl.classList = "list-item flex-row align-left";
-  cityHumidEl.textContent = cityHumid + "% Humidty";
+  cityHumidEl.textContent = "Humidity: " + cityHumid + "% Humidty";
   weatherEl.appendChild(cityHumidEl);
 
   var cityWind = city.wind.speed;
   var cityWindEl = document.createElement("p");
   cityWindEl.classList = "list-item flex-row align-left";
-  cityWindEl.textContent = cityWind + "mph";
+  cityWindEl.textContent = "Wind Speed: " + cityWind + " mph";
   weatherEl.appendChild(cityWindEl);
 
-  // WHERE IS UV INDEX??????
-  // var cityTemp = city.main.temp;
-  // var cityTempEl = document.createElement("p");
-  // cityTempEl.classList = "list-item flex-row align-left";
-  // var TempEl = document.createElement("span");
-  // TempEl.textContent = cityTemp;
-  // weatherEl.appendChild(TempEl);
+  var cityLatitude = city.coord.lat;
+  var cityLongitude = city.coord.lon;
 
-  //   // check if current repo has issues or not
-  //   if (repos[i].open_issues_count > 0) {
-  //     statusEl.innerHTML =
-  //       "<i class='fas fa-times status-icon icon-danger'></i>" +
-  //       repos[i].open_issues_count +
-  //       " issue(s)";
-  //   } else {
-  //     statusEl.innerHTML =
-  //       "<i class='fas fa-check-square status-icon icon-success'></i>";
-  //   }
+  console.log(cityLatitude);
+  console.log(cityLongitude);
+
+  fetch(
+    "http://api.openweathermap.org/data/2.5/uvi?lat=" +
+      cityLatitude +
+      "&lon=" +
+      cityLongitude +
+      "&appid=2c1cfa7d8c1ab09dbd43af544129557a"
+  ).then(function (response) {
+    if (response.ok) {
+      response.json().then(function (data) {
+        displayUVIndex(data);
+      });
+    }
+  });
 
   // append to container
   cityEl.appendChild(weatherEl);
