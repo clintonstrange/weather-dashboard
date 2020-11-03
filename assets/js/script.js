@@ -30,15 +30,22 @@ var getCityWeather = function (city) {
 
 var displayUVIndex = function (data) {
   var cityUV = data.value;
+  cityUV.classList = "bg-danger rounded";
   var cityUVEl = document.createElement("p");
   cityUVEl.classList = "list-item flex-row align-left";
-  cityUVEl.textContent = "UV Index: " + cityUV;
+  cityUVEl.textContent = "UV Index: ";
+  varCityUVSpan = document.createElement("span");
+  varCityUVSpan.classList = "bg-danger rounded p-1 text-white";
+  varCityUVSpan.textContent = cityUV;
+  cityUVEl.appendChild(varCityUVSpan);
   weatherEl.appendChild(cityUVEl);
 };
 
 var displayWeather = function (city) {
   // clear old content
   currentContainerEl.textContent = "";
+  currentContainerEl.classList =
+    "list-group border border-primary rounded p-3 m-2";
   console.log(city.name);
   console.log(city.main.temp);
   console.log(city.main.humidity);
@@ -47,16 +54,25 @@ var displayWeather = function (city) {
   var cityName = city.name;
   var todaysDate = moment().format("(MM/DD/YYYY)");
   var cityIcon = city.weather[0].icon;
+  var iconImgSpan = document.createElement("span");
+  var iconImg = document.createElement("img");
+  iconImg.setAttribute(
+    "src",
+    "http://openweathermap.org/img/w/" + cityIcon + ".png"
+  );
+  iconImgSpan.appendChild(iconImg);
 
-  var weatherTitle = cityName + " " + todaysDate + " " + cityIcon;
+  var weatherTitle = cityName + " " + todaysDate + " ";
   weatherTitle.classList = "city-title";
   console.log(weatherTitle);
 
   var cityEl = document.createElement("div");
   cityEl.classList = "list-item flex-row justify-space-between align-left";
 
-  var titleEl = document.createElement("span");
+  var titleEl = document.createElement("h1");
   titleEl.textContent = weatherTitle;
+
+  titleEl.appendChild(iconImgSpan);
 
   cityEl.appendChild(titleEl);
 
@@ -65,7 +81,7 @@ var displayWeather = function (city) {
   var cityTemp = city.main.temp;
   var cityTempEl = document.createElement("p");
   cityTempEl.classList = "list-item flex-row align-left";
-  cityTempEl.textContent = "Temperature: " + cityTemp + " \u00B0F";
+  cityTempEl.textContent = "Temperature: " + Math.round(cityTemp) + " \u00B0F";
   weatherEl.appendChild(cityTempEl);
 
   var cityHumid = city.main.humidity;
@@ -77,7 +93,8 @@ var displayWeather = function (city) {
   var cityWind = city.wind.speed;
   var cityWindEl = document.createElement("p");
   cityWindEl.classList = "list-item flex-row align-left";
-  cityWindEl.textContent = "Wind Speed: " + cityWind + " mph";
+  cityWindEl.textContent =
+    "Wind Speed: " + Math.round(cityWind * 10) / 10 + " MPH";
   weatherEl.appendChild(cityWindEl);
 
   var cityLatitude = city.coord.lat;
@@ -108,6 +125,9 @@ var displayWeather = function (city) {
 };
 
 var displayFiveDayWeather = function (city) {
+  fiveDayContainerEl.classList =
+    "row d-flex justify-content-around border border-primary rounded p-3 m-2";
+
   var fiveDayForecastHeader = document.createElement("h2");
   fiveDayForecastHeader.classList = "col-12";
   fiveDayForecastHeader.textContent = "5-Day Forecast:";
@@ -119,26 +139,29 @@ var displayFiveDayWeather = function (city) {
 
   for (var i = 5; i < city.list.length; i = i + 8) {
     var forecastContainer = document.createElement("div");
-    forecastContainer.classList = "bg-primary rounded mr-2 ml-2 text-light";
+    forecastContainer.classList = "bg-primary rounded p-2 text-light";
 
     fiveDayContainerEl.appendChild(forecastContainer);
 
     var date = document.createElement("p");
+    date.classList = "mb-8";
     dt = city.list[i].dt * 1000;
     var formatDate = new Date(dt);
     date.textContent = formatDate.toLocaleDateString();
     forecastContainer.appendChild(date);
 
     var icon = document.createElement("img");
-    icon.setAttribute =
-      ("src",
-      "http://openweathermap.org/img/w/" +
-        city.list[i].weather[0].icon +
-        ".png");
+    icon.classList = "mt-0 mb-0";
+    icon.setAttribute(
+      "src",
+      "http://openweathermap.org/img/w/" + city.list[i].weather[0].icon + ".png"
+    );
     forecastContainer.appendChild(icon);
 
     var temp = document.createElement("p");
-    temp.textContent = "Temperature: " + city.list[i].main.temp + " \u00B0F";
+    tempVal = city.list[i].main.temp;
+    console.log(Math.round(tempVal));
+    temp.textContent = "Temperature: " + Math.round(tempVal) + " \u00B0F";
     forecastContainer.appendChild(temp);
 
     var humidity = document.createElement("p");
@@ -203,6 +226,7 @@ var getFiveDayWeather = function (city) {
 var formSubmitHandler = function (event) {
   event.preventDefault();
   // get value from input element
+
   var cityName = cityInputEl.value.trim();
 
   if (cityName) {

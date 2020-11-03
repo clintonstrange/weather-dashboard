@@ -1,9 +1,5 @@
-* {
-  border: 1px solid red;
-}
-
-.city-title {
-  font-size: x-large;
+p {
+  margin-bottom: 8px;
 }
 
 .btn {
