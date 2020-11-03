@@ -43,7 +43,8 @@ var displayUVIndex = function (data) {
 
 var displayWeather = function (city) {
   // clear old content
-  currentContainerEl.textContent = "";
+  currentContainerEl.innerHTML = "";
+  weatherEl.innerHTML = "";
   currentContainerEl.classList =
     "list-group border border-primary rounded p-3 m-2";
   console.log(city.name);
@@ -125,6 +126,8 @@ var displayWeather = function (city) {
 };
 
 var displayFiveDayWeather = function (city) {
+  fiveDayContainerEl.innerHTML = "";
+
   fiveDayContainerEl.classList =
     "row d-flex justify-content-around border border-primary rounded p-3 m-2";
 
