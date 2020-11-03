@@ -2,6 +2,10 @@
   border: 1px solid red;
 }
 
+.city-title {
+  font-size: x-large;
+}
+
 .btn {
   border: solid 3px skyblue;
 }

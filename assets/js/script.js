@@ -49,6 +49,7 @@ var displayWeather = function (city) {
   var cityIcon = city.weather[0].icon;
 
   var weatherTitle = cityName + " " + todaysDate + " " + cityIcon;
+  weatherTitle.classList = "city-title";
   console.log(weatherTitle);
 
   var cityEl = document.createElement("div");
@@ -123,17 +124,17 @@ var displayFiveDayWeather = function (city) {
     fiveDayContainerEl.appendChild(forecastContainer);
 
     var date = document.createElement("p");
-    dateText = city.list[i].dt_txt;
-    dateSplit = dateText.split(" ")[0];
-    dateReplace = dateSplit.replace("-", "/");
-    dateFinal = dateReplace.replace("-", "/");
-
-    console.log(dateFinal);
-    date.textContent = dateFinal;
+    dt = city.list[i].dt * 1000;
+    var formatDate = new Date(dt);
+    date.textContent = formatDate.toLocaleDateString();
     forecastContainer.appendChild(date);
 
-    var icon = document.createElement("p");
-    icon.textContent = city.list[i].weather[0].icon;
+    var icon = document.createElement("img");
+    icon.setAttribute =
+      ("src",
+      "http://openweathermap.org/img/w/" +
+        city.list[i].weather[0].icon +
+        ".png");
     forecastContainer.appendChild(icon);
 
     var temp = document.createElement("p");
