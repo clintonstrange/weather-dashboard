@@ -255,18 +255,16 @@ var formSubmitHandler = function (event) {
   }
 };
 
-// var btnSubmitHandler = function (event) {
-//   event.preventDefault();
-//   console.log(this.id);
-// };
+
 
 var btnSubmitHandler = function (event) {
-  
+  event.preventDefault();
+
   cityName = document.
   getCityWeather(cityName);
     getFiveDayWeather(cityName);
 
-});
+};
 
 cityFormEl.addEventListener("submit", formSubmitHandler);
 searchHistoryContainerEl.addEventListener("click", btnSubmitHandler);
