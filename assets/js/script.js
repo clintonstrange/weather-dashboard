@@ -3,7 +3,9 @@ var cityInputEl = document.querySelector("#city-search-input");
 var currentContainerEl = document.querySelector("#current-container");
 var fiveDayContainerEl = document.querySelector("#five-day-container");
 var weatherEl = document.createElement("div");
-searchHistoryContainerEl = document.querySelector("#search-history-container");
+var searchHistoryContainerEl = document.querySelector(
+  "#search-history-container"
+);
 var historyBtnEl = document.querySelector(".history-button");
 
 var getCityWeather = function (city) {
@@ -223,7 +225,6 @@ var getFiveDayWeather = function (city) {
       }
     })
     .catch(function (error) {
-      // Notice this `.catch()` getting chained onto the end of the `.then()` method
       alert("Unable to connect to Open Weather");
     });
 };
@@ -232,7 +233,6 @@ var displaySearchHistory = function (city) {
   pastCityBtnEl = document.createElement("button");
   pastCityBtnEl.classList = "history-button d-block w-100 text-align-left p-2";
   pastCityBtnEl.setAttribute("id", city);
-  // pastCityBtnEl.setAttribute("onclick", "(this.id)");
   pastCityBtnEl.textContent = city;
   searchHistoryContainerEl.appendChild(pastCityBtnEl);
 };
@@ -255,12 +255,11 @@ var formSubmitHandler = function (event) {
 
 var btnSubmitHandler = function (event) {
   event.preventDefault();
+  var cityName = event.target.textContent;
 
-  var cityName = $(this).getElementById();
-  console.log(cityName);
   getCityWeather(cityName);
   getFiveDayWeather(cityName);
 };
 
 cityFormEl.addEventListener("submit", formSubmitHandler);
-historyBtnEl.addEventListener("click", btnSubmitHandler);
+searchHistoryContainerEl.addEventListener("click", btnSubmitHandler);
