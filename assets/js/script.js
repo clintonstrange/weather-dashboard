@@ -7,13 +7,28 @@ var searchHistoryContainerEl = document.querySelector(
   "#search-history-container"
 );
 var historyBtnEl = document.querySelector(".history-button");
+var cityList = JSON.parse(localStorage.getItem("city")) || [];
+
+var loadDashboard = function (cityList) {
+  $("#search-history-container").empty();
+
+  for (var i = 0; i < cityList.length; i++) {
+    // var cityListItem = $("<button>");
+    console.log(cityList[i]);
+    // cityListItem.text(cityList[i]);
+    // console.log(cityListItem);
+    // cityListItem.addClass("history-button d-block w-100 text-align-left p-2");
+    // cityListItem.setAttribute("id", cityListItem.text);
+    // searchHistoryContainerEl.append(cityListItem);
+  }
+};
 
 var getCityWeather = function (city) {
   var apiUrl =
     "https://api.openweathermap.org/data/2.5/weather?q=" +
     city +
     "&units=imperial&appid=2c1cfa7d8c1ab09dbd43af544129557a";
-  console.log(apiUrl);
+  // console.log(apiUrl);
   // make a request to the url
   fetch(apiUrl)
     .then(function (response) {
@@ -51,10 +66,10 @@ var displayWeather = function (city) {
   weatherEl.innerHTML = "";
   currentContainerEl.classList =
     "list-group border border-primary rounded p-3 m-2";
-  console.log(city.name);
-  console.log(city.main.temp);
-  console.log(city.main.humidity);
-  console.log(city.wind.speed);
+  // console.log(city.name);
+  // console.log(city.main.temp);
+  // console.log(city.main.humidity);
+  // console.log(city.wind.speed);
 
   var cityName = city.name;
   var todaysDate = moment().format("(MM/DD/YYYY)");
@@ -69,7 +84,7 @@ var displayWeather = function (city) {
 
   var weatherTitle = cityName + " " + todaysDate + " ";
   weatherTitle.classList = "city-title";
-  console.log(weatherTitle);
+  // console.log(weatherTitle);
 
   var cityEl = document.createElement("div");
   cityEl.classList = "list-item flex-row justify-space-between align-left";
@@ -105,8 +120,8 @@ var displayWeather = function (city) {
   var cityLatitude = city.coord.lat;
   var cityLongitude = city.coord.lon;
 
-  console.log(cityLatitude);
-  console.log(cityLongitude);
+  // console.log(cityLatitude);
+  // console.log(cityLongitude);
 
   fetch(
     "http://api.openweathermap.org/data/2.5/uvi?lat=" +
@@ -141,8 +156,8 @@ var displayFiveDayWeather = function (city) {
 
   fiveDayContainerEl.appendChild(fiveDayForecastHeader);
 
-  console.log(city);
-  console.log(city.city.name);
+  // console.log(city);
+  // console.log(city.city.name);
 
   for (var i = 5; i < city.list.length; i = i + 8) {
     var forecastContainer = document.createElement("div");
@@ -167,7 +182,7 @@ var displayFiveDayWeather = function (city) {
 
     var temp = document.createElement("p");
     tempVal = city.list[i].main.temp;
-    console.log(Math.round(tempVal));
+    // console.log(Math.round(tempVal));
     temp.textContent = "Temperature: " + Math.round(tempVal) + " \u00B0F";
     forecastContainer.appendChild(temp);
 
@@ -211,7 +226,7 @@ var getFiveDayWeather = function (city) {
     "https://api.openweathermap.org/data/2.5/forecast?q=" +
     city +
     "&units=imperial&appid=2c1cfa7d8c1ab09dbd43af544129557a";
-  console.log(apiUrl);
+  // console.log(apiUrl);
   // make a request to the url
   fetch(apiUrl)
     .then(function (response) {
@@ -248,6 +263,11 @@ var formSubmitHandler = function (event) {
     getFiveDayWeather(cityName);
     displaySearchHistory(cityName);
     cityInputEl.value = "";
+    console.log(cityList);
+    console.log(cityName);
+    cityList.push(cityName);
+    console.log(cityList);
+    localStorage.setItem("city", JSON.stringify(cityList));
   } else {
     alert("Please enter a city");
   }
@@ -255,11 +275,13 @@ var formSubmitHandler = function (event) {
 
 var btnSubmitHandler = function (event) {
   event.preventDefault();
+
   var cityName = event.target.textContent;
 
   getCityWeather(cityName);
   getFiveDayWeather(cityName);
 };
 
+loadDashboard(cityList);
 cityFormEl.addEventListener("submit", formSubmitHandler);
 searchHistoryContainerEl.addEventListener("click", btnSubmitHandler);
