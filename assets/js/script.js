@@ -260,9 +260,13 @@ var formSubmitHandler = function (event) {
 //   console.log(this.id);
 // };
 
-$(".history-button").click(function () {
-  console.log("click");
+var btnSubmitHandler = function (event) {
+  
+  cityName = document.
+  getCityWeather(cityName);
+    getFiveDayWeather(cityName);
+
 });
 
 cityFormEl.addEventListener("submit", formSubmitHandler);
-//searchHistoryContainerEl.addEventListener("click", btnSubmitHandler);
+searchHistoryContainerEl.addEventListener("click", btnSubmitHandler);
