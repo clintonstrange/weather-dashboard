@@ -14,15 +14,16 @@
         <h1 class="bg-dark text-light text-center">Clint's Weather Dashboard</h1>
     </header>
     <main class="row justify-space-between">
-        <div id="search-container" class="col-4">
+        <div id="search-container" class="col-4 bg-light">
             <div id="search-bar-container" class="card">
                 <h3 class="card-header">Search for a City:</h3>
                 <form id="city-form" class="card-body">
                     <input name="city" id="city-search-input" type="text" autofocus="true" class="form-input" />
                     <button type="submit" class="btn bg-primary text-white rounded"><span class="oi oi-magnifying-glass"></span></button>
                 </form>
+                <div id="search-history-container" class="bg-primary"></div>
             </div>
-            <div id="search-results-container">Search Results Container</div>
+            
         </div>
       
         <div class="col-8">
@@ -31,6 +32,7 @@
         </div>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
     <script src="assets/js/script.js"></script>
 </body>
 </html>

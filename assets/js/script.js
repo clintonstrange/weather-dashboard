@@ -3,6 +3,10 @@ var cityInputEl = document.querySelector("#city-search-input");
 var currentContainerEl = document.querySelector("#current-container");
 var fiveDayContainerEl = document.querySelector("#five-day-container");
 var weatherEl = document.createElement("div");
+var searchHistoryContainerEl = document.querySelector(
+  "#search-history-container"
+);
+var historyBtnEl = document.querySelector(".history-button");
 
 var getCityWeather = function (city) {
   var apiUrl =
@@ -226,6 +230,15 @@ var getFiveDayWeather = function (city) {
     });
 };
 
+var displaySearchHistory = function (city) {
+  pastCityBtnEl = document.createElement("button");
+  pastCityBtnEl.classList = "history-button d-block w-100 text-align-left p-2";
+  pastCityBtnEl.setAttribute("id", city);
+  // pastCityBtnEl.setAttribute("onclick", "(this.id)");
+  pastCityBtnEl.textContent = city;
+  searchHistoryContainerEl.appendChild(pastCityBtnEl);
+};
+
 var formSubmitHandler = function (event) {
   event.preventDefault();
   // get value from input element
@@ -235,10 +248,21 @@ var formSubmitHandler = function (event) {
   if (cityName) {
     getCityWeather(cityName);
     getFiveDayWeather(cityName);
+    displaySearchHistory(cityName);
     cityInputEl.value = "";
   } else {
     alert("Please enter a city");
   }
 };
 
+// var btnSubmitHandler = function (event) {
+//   event.preventDefault();
+//   console.log(this.id);
+// };
+
+$(".history-button").click(function () {
+  console.log("click");
+});
+
 cityFormEl.addEventListener("submit", formSubmitHandler);
+//searchHistoryContainerEl.addEventListener("click", btnSubmitHandler);
