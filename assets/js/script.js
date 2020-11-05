@@ -48,7 +48,7 @@ var getCityWeather = function (city) {
 
 var displayUVIndex = function (data) {
   var cityUV = data.value;
-  console.log(data.value);
+  //console.log(data.value);
 
   var cityUVEl = document.createElement("p");
   cityUVEl.classList = "list-item flex-row align-left";
@@ -225,10 +225,6 @@ var displayFiveDayWeather = function (city) {
   // console.log(city.list[37].weather[0].icon);
   // console.log(city.list[37].main.temp);
   // console.log(city.list[37].main.humidity);
-
-  // var cityName = city.name;
-  // var todaysDate = moment().format("(MM/DD/YYYY)");
-  // var cityIcon = city.weather[0].icon;
 };
 
 var getFiveDayWeather = function (city) {
@@ -255,10 +251,17 @@ var getFiveDayWeather = function (city) {
 };
 
 var displaySearchHistory = function (city) {
-  //cityList.splice([cityName], 1);
+  for (var i = 0; i < cityList.length; i++) {
+    console.log(cityList[i]);
+    if (city === cityList[i]) {
+      cityList.splice(i, 1);
+    }
+  }
+
   cityList.push(city);
   // console.log(cityList);
   localStorage.setItem("city", JSON.stringify(cityList));
+
   loadDashboard(cityList);
 };
 
@@ -267,7 +270,9 @@ var formSubmitHandler = function (event) {
   // get value from input element
 
   var cityName = cityInputEl.value.trim();
-
+  if (!cityName) {
+    alert("Not a valid city");
+  }
   if (cityName) {
     getCityWeather(cityName);
     getFiveDayWeather(cityName);
