@@ -227,29 +227,6 @@ var displayFiveDayWeather = function (city) {
   // console.log(city.list[37].main.humidity);
 };
 
-var getFiveDayWeather = function (city) {
-  var apiUrl =
-    "https://api.openweathermap.org/data/2.5/forecast?q=" +
-    city +
-    "&units=imperial&appid=2c1cfa7d8c1ab09dbd43af544129557a";
-  // console.log(apiUrl);
-  // make a request to the url
-  fetch(apiUrl)
-    .then(function (response) {
-      // request was successful
-      if (response.ok) {
-        response.json().then(function (data) {
-          displayFiveDayWeather(data, city);
-        });
-      } else {
-        alert("Error: " + response.statusText);
-      }
-    })
-    .catch(function (error) {
-      alert("Unable to connect to Open Weather");
-    });
-};
-
 var displaySearchHistory = function (city) {
   for (var i = 0; i < cityList.length; i++) {
     console.log(cityList[i]);
@@ -265,18 +242,38 @@ var displaySearchHistory = function (city) {
   loadDashboard(cityList);
 };
 
+var getFiveDayWeather = function (city) {
+  var apiUrl =
+    "https://api.openweathermap.org/data/2.5/forecast?q=" +
+    city +
+    "&units=imperial&appid=2c1cfa7d8c1ab09dbd43af544129557a";
+  // console.log(apiUrl);
+  // make a request to the url
+  fetch(apiUrl)
+    .then(function (response) {
+      // request was successful
+      if (response.ok) {
+        response.json().then(function (data) {
+          displayFiveDayWeather(data, city);
+          displaySearchHistory(city);
+        });
+      } else {
+        alert("Error: " + response.statusText);
+      }
+    })
+    .catch(function (error) {
+      alert("Unable to connect to Open Weather");
+    });
+};
+
 var formSubmitHandler = function (event) {
   event.preventDefault();
   // get value from input element
 
   var cityName = cityInputEl.value.trim();
-  if (!cityName) {
-    alert("Not a valid city");
-  }
   if (cityName) {
     getCityWeather(cityName);
     getFiveDayWeather(cityName);
-    displaySearchHistory(cityName);
     cityInputEl.value = "";
     // console.log(cityList);
     // console.log(cityName);
