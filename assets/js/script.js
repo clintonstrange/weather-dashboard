@@ -13,13 +13,12 @@ var loadDashboard = function (cityList) {
   $("#search-history-container").empty();
 
   for (var i = 0; i < cityList.length; i++) {
-    // var cityListItem = $("<button>");
-    console.log(cityList[i]);
-    // cityListItem.text(cityList[i]);
-    // console.log(cityListItem);
-    // cityListItem.addClass("history-button d-block w-100 text-align-left p-2");
-    // cityListItem.setAttribute("id", cityListItem.text);
-    // searchHistoryContainerEl.append(cityListItem);
+    var cityListItem = document.createElement("button");
+    cityListItem.setAttribute("id", cityList[i]);
+    cityListItem.classList = "history-button d-block w-100 text-align-left p-2";
+    cityListItem.textContent = cityList[i];
+
+    searchHistoryContainerEl.prepend(cityListItem);
   }
 };
 
@@ -49,14 +48,25 @@ var getCityWeather = function (city) {
 
 var displayUVIndex = function (data) {
   var cityUV = data.value;
-  cityUV.classList = "bg-danger rounded";
+  console.log(data.value);
+
   var cityUVEl = document.createElement("p");
   cityUVEl.classList = "list-item flex-row align-left";
   cityUVEl.textContent = "UV Index: ";
-  varCityUVSpan = document.createElement("span");
-  varCityUVSpan.classList = "bg-danger rounded p-1 text-white";
-  varCityUVSpan.textContent = cityUV;
-  cityUVEl.appendChild(varCityUVSpan);
+  var cityUVSpan = document.createElement("span");
+  if (data.value === 11 || data.value > 11) {
+    cityUVSpan.classList = "bg-dark rounded p-1 text-white";
+  }
+  if (data.value > 7 && data.value < 11) {
+    cityUVSpan.classList = "bg-danger rounded p-1 text-white";
+  }
+  if (data.value > 2 && data.value < 8) {
+    cityUVSpan.classList = "bg-warning rounded p-1 text-white";
+  } else if (data.value === 2 || data.value < 2) {
+    cityUVSpan.classList = "bg-success rounded p-1 text-white";
+  }
+  cityUVSpan.textContent = cityUV;
+  cityUVEl.appendChild(cityUVSpan);
   weatherEl.appendChild(cityUVEl);
 };
 
@@ -245,11 +255,11 @@ var getFiveDayWeather = function (city) {
 };
 
 var displaySearchHistory = function (city) {
-  pastCityBtnEl = document.createElement("button");
-  pastCityBtnEl.classList = "history-button d-block w-100 text-align-left p-2";
-  pastCityBtnEl.setAttribute("id", city);
-  pastCityBtnEl.textContent = city;
-  searchHistoryContainerEl.appendChild(pastCityBtnEl);
+  //cityList.splice([cityName], 1);
+  cityList.push(city);
+  // console.log(cityList);
+  localStorage.setItem("city", JSON.stringify(cityList));
+  loadDashboard(cityList);
 };
 
 var formSubmitHandler = function (event) {
@@ -263,11 +273,8 @@ var formSubmitHandler = function (event) {
     getFiveDayWeather(cityName);
     displaySearchHistory(cityName);
     cityInputEl.value = "";
-    console.log(cityList);
-    console.log(cityName);
-    cityList.push(cityName);
-    console.log(cityList);
-    localStorage.setItem("city", JSON.stringify(cityList));
+    // console.log(cityList);
+    // console.log(cityName);
   } else {
     alert("Please enter a city");
   }
